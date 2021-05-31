@@ -129,67 +129,18 @@ parcelRequire = (function (modules, cache, entry, globalName) {
     var file = this.files[0],
         reader = new FileReader();
 
-    reader.onload = function (e) {
-      console.log(this.result);
-    };
-    /* Sposoby odczytywania plików */
-    // reader.readAsText(file);
-    // reader.readAsBinaryString(file);
-
-    /* Pobierz obraz */
-    // if (file.type.match("image.*")) {
-    //     reader.onload = function () {
-    //         let img = new Image();
-    //         img.src = this.result;
-    //         document.querySelector("#playground").appendChild(img);
-    //     };
-    //     reader.readAsDataURL(file);
-    // }
-
-
-    reader.onloadstart = function () {
-      console.log("Start odczytywania. readyState: ".concat(this.readyState));
-    };
-
     reader.onload = function () {
-      console.log("Wczytywanie zako\u0144czone sukcesem. readyState: ".concat(this.readyState));
+      var blob = new Blob([this.result], {
+        type: "image/jpeg"
+      });
+      var fileURL = window.URL.createObjectURL(blob);
+      var img = new Image();
+      img.src = fileURL;
+      document.querySelector("#playground").appendChild(img);
+      window.URL.revokeObjectURL(fileURL);
     };
 
-    reader.onloadend = function () {
-      console.log("Zako\u0144czono odczywywanie. readyState: ".concat(this.readyState));
-    };
-
-    reader.onprogress = function (e) {
-      if (e.lengthComputable) {
-        var percent = e.loaded / e.total * 100;
-        progress.value = percent;
-      }
-    };
-
-    reader.onabort = function () {
-      console.log("Przerwano odczytywanie pliku. readyState: ".concat(this.readyState));
-    };
-
-    reader.onerror = function () {
-      console.log("Wyst\u0105pi\u0142 b\u0142\u0105d ".concat(this.error.code, " ").concat(this.error.message));
-    };
-
-    start.onclick = function (e) {
-      e.preventDefault();
-      reader.readAsBinaryString(file);
-    };
-
-    stop.onclick = function (e) {
-      e.preventDefault();
-      reader.abort(); // w FF nie zgłasza błędu
-    };
-    /* Get details */
-
-
-    document.querySelector("#fileName").innerHTML = "<strong>Nazwa:</strong> ".concat(file.name);
-    document.querySelector("#fileSize").innerHTML = "<strong>Rozmiar:</strong> ".concat(file.size);
-    document.querySelector("#fileType").innerHTML = "<strong>Typ:</strong> ".concat(file.type);
-    document.querySelector("#fileLastModifiedDate").innerHTML = "<strong>Ostatnio zmodyfikowany:</strong> ".concat(file.lastModifiedDate);
+    reader.readAsArrayBuffer(file);
   };
 })();
 },{}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
