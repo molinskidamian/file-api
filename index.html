@@ -27,9 +27,22 @@
                         />
                     </div>
                     <div class="mb-3">
-                        <button type="submit" class="btn btn-primary">
+                        <button
+                            type="submit"
+                            id="start"
+                            class="btn btn-primary"
+                        >
                             Dodaj
                         </button>
+                        <button type="submit" id="stop" class="btn btn-primary">
+                            Stop
+                        </button>
+                        <progress
+                            id="progress"
+                            value="0"
+                            min="0"
+                            max="100"
+                        ></progress>
                     </div>
                 </form>
             </div>
@@ -44,6 +57,8 @@
                 </div>
             </div>
         </div>
+
+        <div id="playground"></div>
 
         <!-- Move to end body -->
         <script

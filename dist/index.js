@@ -117,82 +117,74 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"js/app.js":[function(require,module,exports) {
-(function () {
-  if (!window.FileReader) return;
-  var fileInput = document.querySelector("#fileInput"),
-      start = document.querySelector("#start"),
-      stop = document.querySelector("#stop"),
-      progress = document.querySelector("#progress");
+})({"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+var bundleURL = null;
 
-  fileInput.onchange = function () {
-    var file = this.files[0],
-        reader = new FileReader();
+function getBundleURLCached() {
+  if (!bundleURL) {
+    bundleURL = getBundleURL();
+  }
 
-    reader.onload = function (e) {
-      console.log(this.result);
-    };
-    /* Sposoby odczytywania plików */
-    // reader.readAsText(file);
-    // reader.readAsBinaryString(file);
+  return bundleURL;
+}
 
-    /* Pobierz obraz */
-    // if (file.type.match("image.*")) {
-    //     reader.onload = function () {
-    //         let img = new Image();
-    //         img.src = this.result;
-    //         document.querySelector("#playground").appendChild(img);
-    //     };
-    //     reader.readAsDataURL(file);
-    // }
+function getBundleURL() {
+  // Attempt to find the URL of the current script and use that as the base URL
+  try {
+    throw new Error();
+  } catch (err) {
+    var matches = ('' + err.stack).match(/(https?|file|ftp|chrome-extension|moz-extension):\/\/[^)\n]+/g);
 
+    if (matches) {
+      return getBaseURL(matches[0]);
+    }
+  }
 
-    reader.onloadstart = function () {
-      console.log("Start odczytywania. readyState: ".concat(this.readyState));
-    };
+  return '/';
+}
 
-    reader.onload = function () {
-      console.log("Wczytywanie zako\u0144czone sukcesem. readyState: ".concat(this.readyState));
-    };
+function getBaseURL(url) {
+  return ('' + url).replace(/^((?:https?|file|ftp|chrome-extension|moz-extension):\/\/.+)?\/[^/]+(?:\?.*)?$/, '$1') + '/';
+}
 
-    reader.onloadend = function () {
-      console.log("Zako\u0144czono odczywywanie. readyState: ".concat(this.readyState));
-    };
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+},{}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+var bundle = require('./bundle-url');
 
-    reader.onprogress = function (e) {
-      if (e.lengthComputable) {
-        var percent = e.loaded / e.total * 100;
-        progress.value = percent;
-      }
-    };
+function updateLink(link) {
+  var newLink = link.cloneNode();
 
-    reader.onabort = function () {
-      console.log("Przerwano odczytywanie pliku. readyState: ".concat(this.readyState));
-    };
-
-    reader.onerror = function () {
-      console.log("Wyst\u0105pi\u0142 b\u0142\u0105d ".concat(this.error.code, " ").concat(this.error.message));
-    };
-
-    start.onclick = function (e) {
-      e.preventDefault();
-      reader.readAsBinaryString(file);
-    };
-
-    stop.onclick = function (e) {
-      e.preventDefault();
-      reader.abort(); // w FF nie zgłasza błędu
-    };
-    /* Get details */
-
-
-    document.querySelector("#fileName").innerHTML = "<strong>Nazwa:</strong> ".concat(file.name);
-    document.querySelector("#fileSize").innerHTML = "<strong>Rozmiar:</strong> ".concat(file.size);
-    document.querySelector("#fileType").innerHTML = "<strong>Typ:</strong> ".concat(file.type);
-    document.querySelector("#fileLastModifiedDate").innerHTML = "<strong>Ostatnio zmodyfikowany:</strong> ".concat(file.lastModifiedDate);
+  newLink.onload = function () {
+    link.remove();
   };
-})();
-},{}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+
+  newLink.href = link.href.split('?')[0] + '?' + Date.now();
+  link.parentNode.insertBefore(newLink, link.nextSibling);
+}
+
+var cssTimeout = null;
+
+function reloadCSS() {
+  if (cssTimeout) {
+    return;
+  }
+
+  cssTimeout = setTimeout(function () {
+    var links = document.querySelectorAll('link[rel="stylesheet"]');
+
+    for (var i = 0; i < links.length; i++) {
+      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
+        updateLink(links[i]);
+      }
+    }
+
+    cssTimeout = null;
+  }, 50);
+}
+
+module.exports = reloadCSS;
+},{"./bundle-url":"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -396,5 +388,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","js/app.js"], null)
-//# sourceMappingURL=/app.c3f9f951.js.map
+},{}]},{},["../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js"], null)
+//# sourceMappingURL=/index.js.map
